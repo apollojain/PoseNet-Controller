@@ -9,10 +9,7 @@ import argparse
 import posenet
 import image_utils
 
-
-MAX_POSE_DETECTIONS = 1
-MIN_POSE_SCORE = 0.15
-MIN_PART_SCORE = 0.1
+import config
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", type=int, default=101)
@@ -61,9 +58,9 @@ def main():
                 input_image,
                 display_image,
                 output_scale,
-                MAX_POSE_DETECTIONS,
-                MIN_POSE_SCORE,
-                MIN_PART_SCORE,
+                config.MAX_POSE_DETECTIONS,
+                config.MIN_POSE_SCORE,
+                config.MIN_PART_SCORE,
             )
 
             cv2.imshow("posenet", overlay_image)

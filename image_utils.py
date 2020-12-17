@@ -6,6 +6,7 @@ import time
 import argparse
 
 import posenet
+import numpy as np 
 
 # left arm
 LEFT_SHOULDER = "leftShoulder"
@@ -18,6 +19,10 @@ RIGHT_WRIST = "rightWrist"
 # slope values
 STRAIGHT_SLOPE_THRESH = 0.5
 VERTICAL_SLOPE_THRESH = 2
+# image categorization dict labels
+LEFT_ARM_OUT = "left_arm_out"
+RIGHT_ARM_OUT = "right_arm_out"
+BOTH_ARMS_UP = "both_arms_up"
 
 
 def process_frame(
@@ -81,8 +86,8 @@ def process_frame(
 def abs_slope(parts_dict, part0, part1):
     _, coords0 = parts_dict[part0]
     _, coords1 = parts_dict[part1]
-    x0, y0 = coords0
-    x1, y1 = coords1
+    y0, x0 = coords0
+    y1, x1 = coords1
     return np.abs(float(y1 - y0) / float(x1 - x0))
 
 
@@ -105,20 +110,20 @@ def right_arm_parts_exist(parts_dict):
 def part_left_of(parts_dict, part_left, part_right):
     _, coords0 = parts_dict[part_left]
     _, coords1 = parts_dict[part_right]
-    x0, _ = coords0
-    x1, _ = coords1
-    return x0 < x1
+    _, x0 = coords0
+    _, x1 = coords1
+    return x0 > x1
 
 
 def part_right_of(parts_dict, part_left, part_right):
-    return not part_left(parts_dict, part_left, part_right)
+    return not part_left_of(parts_dict, part_left, part_right)
 
 
 def part_above(parts_dict, part_above, part_below):
-    _, coords0 = parts_dict[part_left]
-    _, coords1 = parts_dict[part_right]
-    _, y0 = coords0
-    _, y1 = coords1
+    _, coords0 = parts_dict[part_above]
+    _, coords1 = parts_dict[part_below]
+    y0, _ = coords0
+    y1, _ = coords1
     return y0 < y1
 
 
