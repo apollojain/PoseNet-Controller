@@ -8,6 +8,7 @@ import argparse
 
 import posenet
 import image_utils
+import controller
 
 import config
 
@@ -45,12 +46,6 @@ def main():
                 cap, scale_factor=args.scale_factor, output_stride=output_stride
             )
 
-            print(np.shape(input_image))
-            print(np.shape(display_image))
-
-            input_image[0, :, :, :] = cv2.flip(input_image[0, :, :, :], 1)
-            display_image = cv2.flip(display_image, 1)
-
             overlay_image, parts_dict = image_utils.process_frame(
                 sess,
                 model_outputs,
@@ -63,8 +58,15 @@ def main():
                 config.MIN_PART_SCORE,
             )
 
+            image_categorization_dict = image_utils.get_image_categorization_dict(
+                parts_dict
+            )
+
+            controller.trigger_controls(image_categorization_dict)
+
+            overlay_image = cv2.flip(overlay_image, 1)
+
             cv2.imshow("posenet", overlay_image)
-            print("Parts Dict:", parts_dict)
 
             frame_count += 1
             if cv2.waitKey(1) & 0xFF == ord("q"):

@@ -6,7 +6,7 @@ import time
 import argparse
 
 import posenet
-import numpy as np 
+import numpy as np
 
 # left arm
 LEFT_SHOULDER = "leftShoulder"
