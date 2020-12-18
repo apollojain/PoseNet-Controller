@@ -18,10 +18,12 @@ RIGHT_ELBOW = "rightElbow"
 RIGHT_WRIST = "rightWrist"
 # slope values
 STRAIGHT_SLOPE_THRESH = 0.5
-VERTICAL_SLOPE_THRESH = 2
+VERTICAL_SLOPE_THRESH = 1.3
 # image categorization dict labels
 LEFT_ARM_OUT = "left_arm_out"
 RIGHT_ARM_OUT = "right_arm_out"
+LEFT_ARM_UP = "left_arm_up"
+RIGHT_ARM_UP = "right_arm_up"
 BOTH_ARMS_UP = "both_arms_up"
 
 
@@ -195,13 +197,13 @@ def right_arm_up(parts_dict):
     )
 
 
-def both_arms_up(parts_dict):
-    return right_arm_up(parts_dict) and left_arm_up(parts_dict)
-
-
 def get_image_categorization_dict(parts_dict):
+    left_up = left_arm_up(parts_dict)
+    right_up = right_arm_up(parts_dict)
     return {
         LEFT_ARM_OUT: left_arm_extended(parts_dict),
         RIGHT_ARM_OUT: right_arm_extended(parts_dict),
-        BOTH_ARMS_UP: both_arms_up(parts_dict),
+        LEFT_ARM_UP: left_up,
+        RIGHT_ARM_UP: right_up,
+        BOTH_ARMS_UP: left_up and right_up,
     }

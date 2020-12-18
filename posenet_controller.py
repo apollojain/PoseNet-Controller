@@ -12,6 +12,7 @@ import controller
 
 import config
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", type=int, default=101)
 parser.add_argument("--cam_id", type=int, default=0)
@@ -41,6 +42,7 @@ def main():
 
         start = time.time()
         frame_count = 0
+
         while True:
             input_image, display_image, output_scale = posenet.read_cap(
                 cap, scale_factor=args.scale_factor, output_stride=output_stride
